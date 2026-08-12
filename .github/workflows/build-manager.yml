@@ -102,7 +102,7 @@ jobs:
       matrix:
         include:
           - target: aarch64-linux-android
-          - target: x86_64-linux-android
+          # - target: x86_64-linux-android
     uses: ./.github/workflows/ksud.yml
     with:
       target: ${{ matrix.target }}
@@ -114,16 +114,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: x86_64-pc-windows-gnu # windows pc
-            os: ubuntu-latest
-          - target: x86_64-apple-darwin # Intel mac
-            os: macos-latest
-          - target: aarch64-apple-darwin # M chip mac
-            os: macos-latest
+          # - target: x86_64-pc-windows-gnu # windows pc
+          #   os: ubuntu-latest
+          # - target: x86_64-apple-darwin # Intel mac
+          #   os: macos-latest
+          # - target: aarch64-apple-darwin # M chip mac
+          #   os: macos-latest
           - target: aarch64-unknown-linux-musl # arm64 Linux
             os: ubuntu-latest
-          - target: x86_64-unknown-linux-musl # x86 Linux
-            os: ubuntu-latest
+          # - target: x86_64-unknown-linux-musl # x86 Linux
+          #   os: ubuntu-latest
     uses: ./.github/workflows/ksud-extra.yml
     with:
       target: ${{ matrix.target }}
@@ -242,11 +242,11 @@ jobs:
           name: ksud-aarch64-linux-android
           path: artifacts/ksud-aarch64-linux-android
 
-      - name: Download x86_64 ksud
-        uses: actions/download-artifact@v8
-        with:
-          name: ksud-x86_64-linux-android
-          path: artifacts/ksud-x86_64-linux-android
+      # - name: Download x86_64 ksud
+      #   uses: actions/download-artifact@v8
+      #   with:
+      #     name: ksud-x86_64-linux-android
+      #     path: artifacts/ksud-x86_64-linux-android
 
       - name: Place manager apk and ksud artifacts
         run: |
@@ -256,13 +256,13 @@ jobs:
           cp -f "$APK" manager/app/build/outputs/apk/release/
 
           mkdir -p target/aarch64-linux-android/release
-          mkdir -p target/x86_64-linux-android/release
+          # mkdir -p target/x86_64-linux-android/release
           ARM64_KSUD=$(find artifacts/ksud-aarch64-linux-android -type f -name ksud | head -n 1)
-          X86_64_KSUD=$(find artifacts/ksud-x86_64-linux-android -type f -name ksud | head -n 1)
+          # X86_64_KSUD=$(find artifacts/ksud-x86_64-linux-android -type f -name ksud | head -n 1)
           test -n "$ARM64_KSUD"
-          test -n "$X86_64_KSUD"
+          # test -n "$X86_64_KSUD"
           cp -f "$ARM64_KSUD" target/aarch64-linux-android/release/ksud
-          cp -f "$X86_64_KSUD" target/x86_64-linux-android/release/ksud
+          # cp -f "$X86_64_KSUD" target/x86_64-linux-android/release/ksud
 
       - name: Prepare signing inputs
         if: ${{ github.event_name == 'pull_request' || (github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')) || github.ref_type == 'tag' }}
@@ -297,7 +297,6 @@ jobs:
             -b release \
             -t release \
             -a arm64-v8a \
-            -a x86_64 \
             -K "$SIGN_KEYSTORE_FILE" \
             -A "$SIGN_KEY_ALIAS" \
             -P "$SIGN_KEYSTORE_PASSWORD" \

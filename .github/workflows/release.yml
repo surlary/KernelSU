@@ -41,7 +41,7 @@ jobs:
         with:
           name: release-artifacts
           path: |
-            manager/*.apk
+            manager-gradle/*.apk
             android*-lkm/*_kernelsu.ko
             ksud/ksud-*
             ksuinit/**
